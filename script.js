@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending...';
       submitBtn.disabled = true;
       formMessage.style.color = '#94A3B8';
-      formMessage.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending your message to rizwanrahi286@gmail.com...';
+      formMessage.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending your message to weblitex@gmail.com...';
 
       // 5. If EmailJS is configured, send via EmailJS!
       if (isEmailJSConfigured) {
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone: phoneVal || 'Not provided',
             service: serviceVal || 'General Inquiry',
             message: messageVal,
-            to_email: 'rizwanrahi286@gmail.com'
+            to_email: 'weblitex@gmail.com'
           };
 
           await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
           _template: 'table'
         };
 
-        const response = await fetch('https://formsubmit.co/ajax/rizwanrahi286@gmail.com', {
+        const response = await fetch('https://formsubmit.co/ajax/weblitex@gmail.com', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -321,14 +321,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (result.success === 'true' || result.success === true) {
           formMessage.style.color = '#00D2B4';
-          formMessage.innerHTML = `<i class="fas fa-check-circle"></i> Thank you, <strong>${nameVal}</strong>! Your message has been sent successfully to Rizwan.`;
+          formMessage.innerHTML = `<i class="fas fa-check-circle"></i> Thank you, <strong>${nameVal}</strong>! Your message has been sent successfully to Weblitex.`;
           contactForm.reset();
         } else if (result.message && result.message.toLowerCase().includes('activation')) {
           formMessage.style.color = '#FBBF24';
-          formMessage.innerHTML = '<i class="fas fa-envelope-open-text"></i> <strong>Activation Zaroori Hai:</strong> Apne email <strong>rizwanrahi286@gmail.com</strong> par FormSubmit ke <u>Activate Form</u> link par click karein ya EmailJS keys enter karein!';
+          formMessage.innerHTML = '<i class="fas fa-envelope-open-text"></i> <strong>Activation Zaroori Hai:</strong> Apne email <strong>weblitex@gmail.com</strong> par FormSubmit ke <u>Activate Form</u> link par click karein ya EmailJS keys enter karein!';
           contactForm.reset();
         } else if (result.message && result.message.toLowerCase().includes('web server')) {
-          const mailtoFallback = `mailto:rizwanrahi286@gmail.com?subject=${encodeURIComponent(customSubject)}&body=${encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\nPhone: ${phoneVal}\nService: ${serviceVal}\n\nMessage:\n${messageVal}`)}`;
+          const mailtoFallback = `mailto:weblitex@gmail.com?subject=${encodeURIComponent(customSubject)}&body=${encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\nPhone: ${phoneVal}\nService: ${serviceVal}\n\nMessage:\n${messageVal}`)}`;
           formMessage.style.color = '#FBBF24';
           formMessage.innerHTML = `<div style="line-height:1.6;margin-top:6px;">
             <i class="fas fa-info-circle"></i> EmailJS set ho chuka hai! Bas <code>script.js</code> mein apni 3 EmailJS keys enter karein.<br>
