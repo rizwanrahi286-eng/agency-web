@@ -10,11 +10,11 @@
   <link rel="canonical" href="https://weblitex.com/team.html">
   
   <!-- Favicon & Brand Icons -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=2">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=2">
-  <link rel="shortcut icon" href="favicon.ico?v=2">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=3">
+  <link rel="shortcut icon" href="favicon.ico?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#0A0F1D">
   
@@ -41,36 +41,12 @@
     <div class="nav-container" id="navContainer">
       <a class="logo" href="index.html">Webli<span>tex</span></a>
       <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
         <li><a href="index.html#AboutUs">About Us</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="team.html" class="is-active">Our Team</a></li>
         <li><a href="index.html#Reference">Reference</a></li>
       </ul>
-      
-      <!-- Update Bell -->
-      <div class="UpdateBell-wrap">
-        <button type="button" class="UpdateBell-bell" id="bellBtn" aria-expanded="false" aria-haspopup="true" aria-label="Updates" title="Updates">
-          <i class="fas fa-bell"></i>
-          <span class="UpdateBell-dot"></span>
-        </button>
-        <!-- Bell Dropdown -->
-        <div class="UpdateBell-panel" id="bellPanel">
-          <div class="UpdateBell-head">
-            <b>Latest Updates</b>
-            <span>Weblitex</span>
-          </div>
-          <a href="team.html" class="UpdateBell-item">
-            <h4><i class="fas fa-users"></i> Meet Our Team</h4>
-            <p>Discover the founders &amp; engineering leadership behind Weblitex!</p>
-            <span class="UpdateBell-go">View team <i class="fas fa-arrow-right"></i></span>
-          </a>
-          <a href="services.html" class="UpdateBell-item">
-            <h4><i class="fas fa-code"></i> Specialized Services</h4>
-            <p>Explore our deep expertise in WordPress and bespoke Custom Web Development.</p>
-            <span class="UpdateBell-go">View details <i class="fas fa-arrow-right"></i></span>
-          </a>
-        </div>
-      </div>
 
       <a href="index.html#kontakt" class="nav-btn">Contact Us</a>
       
@@ -82,10 +58,10 @@
     <!-- Mobile Drawer -->
     <div class="mobile-menu" id="mobileMenu">
       <ul class="mobile-links">
+        <li><a href="index.html#home" class="m-link">Home</a></li>
         <li><a href="index.html#AboutUs" class="m-link">About Us</a></li>
         <li><a href="services.html" class="m-link">Services</a></li>
-        <li><a href="team.html" class="m-link active">Our Team</a></li>
-        <li><a href="index.html#projects" class="m-link">Projects</a></li>
+        <li><a href="team.html" class="m-link is-active">Our Team</a></li>
         <li><a href="index.html#Reference" class="m-link">Reference</a></li>
       </ul>
       <a href="index.html#kontakt" class="mobile-btn m-link">Contact Us</a>
@@ -169,7 +145,7 @@
 
           <!-- Minimalist Social Links (Email & WhatsApp only) -->
           <div class="team-social-links">
-            <a href="mailto:weblitex@gmail.com" class="team-social-btn" title="Email Muhammad Rizwan" aria-label="Email Muhammad Rizwan">
+            <a href="mailto:rizwanrahi286@gmail.com" class="team-social-btn" title="Email Muhammad Rizwan" aria-label="Email Muhammad Rizwan">
               <i class="fas fa-envelope"></i>
             </a>
             <a href="https://wa.me/923122412719" target="_blank" rel="noopener" class="team-social-btn" title="WhatsApp Muhammad Rizwan" aria-label="WhatsApp Muhammad Rizwan">
@@ -363,14 +339,14 @@
       <!-- Footer Bottom Bar -->
       <div class="footer-bottom-bar">
         <div class="footer-copy">
-          &copy; 2025 <strong>Weblitex</strong>. All rights reserved.
+          &copy; 2026 <strong>Weblitex</strong>. All rights reserved.
         </div>
         <div class="footer-legal">
           <a href="javascript:void(0)" id="openPrivacyPolicyBtn">Privacy Policy</a>
           <span class="dot-sep">&bull;</span>
           <a href="javascript:void(0)" id="openCookieSettingsBtn">Cookie Settings</a>
           <span class="dot-sep">&bull;</span>
-          <a href="#">Terms of Service</a>
+          <a href="javascript:void(0)" id="openTermsBtn">Terms of Service</a>
           <span class="dot-sep">&bull;</span>
           <span>Engineered in Umerkot</span>
         </div>
@@ -443,6 +419,105 @@
 
     <div class="privacy-modal-footer">
       <button class="privacy-modal-btn" id="closePrivacyModalFooterBtn">Close Policy</button>
+    </div>
+  </div>
+
+  <!-- Terms of Service Modal -->
+  <div class="legal-modal-backdrop" id="termsModalBackdrop"></div>
+  <div class="legal-modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+    <div class="legal-modal-header">
+      <div class="legal-modal-title-wrap">
+        <div class="legal-modal-badge"><i class="fas fa-gavel"></i> Legal Agreement</div>
+        <h3 id="termsModalTitle">Weblitex Terms of Service</h3>
+      </div>
+      <button class="legal-modal-close" id="closeTermsModalBtn" aria-label="Close Terms of Service">&times;</button>
+    </div>
+    
+    <div class="legal-modal-body">
+      <p class="legal-intro">
+        Welcome to <strong>Weblitex Agency</strong>. By accessing our website, exploring our client showcases, or contracting our design and web engineering services, you agree to comply with and be bound by the following terms.
+      </p>
+
+      <h4>1. Scope of Engineering &amp; Services</h4>
+      <p>Weblitex provides bespoke web design, custom frontend and full-stack software development, WordPress engineering, UI/UX design, and ongoing performance optimization. Each engagement is governed by an agreed statement of work, milestone schedule, and technical specification.</p>
+
+      <h4>2. Intellectual Property Rights</h4>
+      <p>Upon receipt of full contract payment, all tailored codebases, custom graphical assets, and deliverable files engineered specifically for the client transfer entirely to client ownership. Weblitex reserves the right to showcase the finalized project within its portfolio and case studies unless otherwise restricted by an explicit NDA.</p>
+
+      <h4>3. Client Cooperation &amp; Materials</h4>
+      <p>Clients agree to provide required assets, logos, copy, and timely milestone approvals necessary for scheduled project progression. Weblitex is not liable for schedule delays caused by deferred asset delivery or scope modifications outside agreed terms.</p>
+
+      <h4>4. Revisions &amp; Quality Assurance</h4>
+      <p>Every development package includes designated review and revision rounds. All code is delivered to rigorous QA benchmarks covering cross-device responsiveness, Core Web Vitals performance, and modern browser standards.</p>
+
+      <h4>5. Warranties &amp; Limitation of Liability</h4>
+      <p>Weblitex delivers all work adhering to high engineering standards. However, services are provided on an "as-is" basis regarding third-party hosting, platform outages, or external API disruptions outside our direct control.</p>
+
+      <h4>6. Governing Law &amp; Jurisdiction</h4>
+      <p>These terms shall be construed and governed in accordance with the laws of Pakistan. For inquiries or legal notices, contact our headquarters in Umerkot at <a href="mailto:weblitex@gmail.com" style="color:var(--color-brand); font-weight:600;">weblitex@gmail.com</a>.</p>
+    </div>
+
+    <div class="legal-modal-footer">
+      <button class="legal-modal-btn" id="closeTermsModalFooterBtn">I Understand</button>
+    </div>
+  </div>
+
+  <!-- Cookie Settings Modal -->
+  <div class="legal-modal-backdrop" id="cookieSettingsModalBackdrop"></div>
+  <div class="legal-modal" id="cookieSettingsModal" role="dialog" aria-modal="true" aria-labelledby="cookieSettingsModalTitle">
+    <div class="legal-modal-header">
+      <div class="legal-modal-title-wrap">
+        <div class="legal-modal-badge"><i class="fas fa-sliders-h"></i> Cookie Preferences</div>
+        <h3 id="cookieSettingsModalTitle">Cookie &amp; Storage Settings</h3>
+      </div>
+      <button class="legal-modal-close" id="closeCookieSettingsModalBtn" aria-label="Close Cookie Settings">&times;</button>
+    </div>
+    
+    <div class="legal-modal-body">
+      <p class="legal-intro">
+        Customize your cookie and privacy preferences below. We respect your autonomy and provide granular controls over how data is processed on Weblitex web properties.
+      </p>
+
+      <div class="cookie-pref-item">
+        <div class="cookie-pref-info">
+          <div class="cookie-pref-title">
+            <strong>Strictly Necessary Cookies</strong>
+            <span class="cookie-pref-tag required">Always Active</span>
+          </div>
+          <p>Essential for basic site functionality, secure sessions, navigation caching, and CSRF protection. Cannot be switched off.</p>
+        </div>
+      </div>
+
+      <div class="cookie-pref-item">
+        <div class="cookie-pref-info">
+          <div class="cookie-pref-title">
+            <strong>Performance &amp; Speed Cookies</strong>
+            <label class="pref-switch">
+              <input type="checkbox" id="prefPerfCookies" checked>
+              <span class="pref-slider"></span>
+            </label>
+          </div>
+          <p>Enables GPU-accelerated micro-animations, client-side caching of portfolio previews, and sub-second asset delivery.</p>
+        </div>
+      </div>
+
+      <div class="cookie-pref-item">
+        <div class="cookie-pref-info">
+          <div class="cookie-pref-title">
+            <strong>Analytics &amp; Experience Metrics</strong>
+            <label class="pref-switch">
+              <input type="checkbox" id="prefAnalyticsCookies" checked>
+              <span class="pref-slider"></span>
+            </label>
+          </div>
+          <p>Collects anonymous telemetry regarding page interactions to help us continually refine user interfaces and optimize Core Web Vitals.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-modal-footer" style="gap:10px;">
+      <button class="cookie-btn reject-btn" id="saveCookieSettingsBtn" style="padding:10px 20px;">Save Preferences</button>
+      <button class="legal-modal-btn" id="acceptAllCookieSettingsBtn">Accept All</button>
     </div>
   </div>
 

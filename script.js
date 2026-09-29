@@ -41,32 +41,93 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Update Bell Dropdown
-  const bellBtn = document.getElementById('bellBtn');
-  const bellPanel = document.getElementById('bellPanel');
+  // 3. Navigation Links ScrollSpy & Active Indicator Underline
+  const desktopNavLinks = document.querySelectorAll('.nav-links a');
+  const mobileNavLinks = document.querySelectorAll('.mobile-links a');
+  const allNavAnchors = document.querySelectorAll('.nav-links a[href^="#"], .mobile-links a[href^="#"]');
 
-  if (bellBtn && bellPanel) {
-    bellBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = bellPanel.classList.contains('active');
-      if (isOpen) {
-        bellPanel.classList.remove('active');
-        bellBtn.classList.remove('open');
-        bellBtn.setAttribute('aria-expanded', 'false');
-      } else {
-        bellPanel.classList.add('active');
-        bellBtn.classList.add('open');
-        bellBtn.setAttribute('aria-expanded', 'true');
+  const spySections = [
+    { id: 'home', el: document.getElementById('home'), targetHref: '#home' },
+    { id: 'AboutUs', el: document.getElementById('AboutUs'), targetHref: '#AboutUs' },
+    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' }
+  ];
+
+  function setActiveNavLink(targetHref) {
+    if (!targetHref) return;
+    desktopNavLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === targetHref || (targetHref === '#home' && (href === '#home' || href === 'index.html#home'))) {
+        link.classList.add('is-active');
+      } else if (href && href.startsWith('#')) {
+        link.classList.remove('is-active');
       }
     });
 
-    document.addEventListener('click', (e) => {
-      if (!bellPanel.contains(e.target) && !bellBtn.contains(e.target)) {
-        bellPanel.classList.remove('active');
-        bellBtn.classList.remove('open');
-        bellBtn.setAttribute('aria-expanded', 'false');
+    mobileNavLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === targetHref || (targetHref === '#home' && (href === '#home' || href === 'index.html#home'))) {
+        link.classList.add('is-active');
+      } else if (href && href.startsWith('#')) {
+        link.classList.remove('is-active');
       }
     });
+  }
+
+  // Smooth scroll and immediate active highlight on click
+  allNavAnchors.forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      const targetHref = anchor.getAttribute('href');
+      if (targetHref && targetHref.startsWith('#')) {
+        const targetElement = document.getElementById(targetHref.substring(1));
+        if (targetElement) {
+          e.preventDefault();
+          setActiveNavLink(targetHref);
+          const navOffset = 80;
+          const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: targetHref === '#home' ? 0 : Math.max(0, elementPosition - navOffset),
+            behavior: 'smooth'
+          });
+          if (history.pushState) {
+            history.pushState(null, null, targetHref);
+          }
+        }
+      }
+    });
+  });
+
+  // Dynamic ScrollSpy
+  if (document.getElementById('home') && document.getElementById('AboutUs')) {
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      if (scrollTimeout) return;
+      scrollTimeout = setTimeout(() => {
+        scrollTimeout = null;
+        const scrollPosition = window.scrollY + 160;
+
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+          setActiveNavLink('#Reference');
+          return;
+        }
+
+        let currentSectionHref = '#home';
+        spySections.forEach(section => {
+          if (section.el) {
+            const sectionTop = section.el.offsetTop;
+            if (scrollPosition >= sectionTop) {
+              currentSectionHref = section.targetHref;
+            }
+          }
+        });
+        setActiveNavLink(currentSectionHref);
+      }, 40);
+    });
+
+    if (window.location.hash) {
+      setTimeout(() => {
+        setActiveNavLink(window.location.hash);
+      }, 100);
+    }
   }
 
   // 4. Featured Projects Carousel (Configured for 3 Projects)
@@ -407,17 +468,24 @@ document.addEventListener('DOMContentLoaded', () => {
   if (acceptCookies) acceptCookies.addEventListener('click', () => hideCookieConsent(true));
   if (rejectCookies) rejectCookies.addEventListener('click', () => hideCookieConsent(false));
   if (closeCookieBtn) closeCookieBtn.addEventListener('click', () => hideCookieConsent(false));
-  if (openCookieSettingsBtn) openCookieSettingsBtn.addEventListener('click', () => showCookieConsent());
-
   // Privacy Policy Modal Controls
+  const privacyModal = document.getElementById('privacyModal');
+  const privacyModalBackdrop = document.getElementById('privacyModalBackdrop');
+  const openPrivacyPolicyBtn = document.getElementById('openPrivacyPolicyBtn');
+  const openPrivacyModalFromCookie = document.getElementById('openPrivacyModalFromCookie');
+  const closePrivacyModalBtn = document.getElementById('closePrivacyModalBtn');
+  const closePrivacyModalFooterBtn = document.getElementById('closePrivacyModalFooterBtn');
+
   function openPrivacyModal() {
     if (privacyModal) privacyModal.classList.add('active');
     if (privacyModalBackdrop) privacyModalBackdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   function closePrivacyModal() {
     if (privacyModal) privacyModal.classList.remove('active');
     if (privacyModalBackdrop) privacyModalBackdrop.classList.remove('active');
+    document.body.style.overflow = '';
   }
 
   if (openPrivacyPolicyBtn) openPrivacyPolicyBtn.addEventListener('click', openPrivacyModal);
@@ -426,10 +494,94 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closePrivacyModalFooterBtn) closePrivacyModalFooterBtn.addEventListener('click', closePrivacyModal);
   if (privacyModalBackdrop) privacyModalBackdrop.addEventListener('click', closePrivacyModal);
 
-  // 9. Weblitex Quantum Reticle Custom Cursor & Comet Stardust Engine
-  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(hover: none)').matches;
+  // Terms of Service Modal Controls
+  const termsModal = document.getElementById('termsModal');
+  const termsModalBackdrop = document.getElementById('termsModalBackdrop');
+  const openTermsBtn = document.getElementById('openTermsBtn');
+  const closeTermsModalBtn = document.getElementById('closeTermsModalBtn');
+  const closeTermsModalFooterBtn = document.getElementById('closeTermsModalFooterBtn');
 
-  if (!isTouchDevice) {
+  function openTermsModal() {
+    if (termsModal) termsModal.classList.add('active');
+    if (termsModalBackdrop) termsModalBackdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeTermsModal() {
+    if (termsModal) termsModal.classList.remove('active');
+    if (termsModalBackdrop) termsModalBackdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (openTermsBtn) openTermsBtn.addEventListener('click', openTermsModal);
+  if (closeTermsModalBtn) closeTermsModalBtn.addEventListener('click', closeTermsModal);
+  if (closeTermsModalFooterBtn) closeTermsModalFooterBtn.addEventListener('click', closeTermsModal);
+  if (termsModalBackdrop) termsModalBackdrop.addEventListener('click', closeTermsModal);
+
+  // Cookie Settings Modal Controls
+  const cookieSettingsModal = document.getElementById('cookieSettingsModal');
+  const cookieSettingsModalBackdrop = document.getElementById('cookieSettingsModalBackdrop');
+  const closeCookieSettingsModalBtn = document.getElementById('closeCookieSettingsModalBtn');
+  const saveCookieSettingsBtn = document.getElementById('saveCookieSettingsBtn');
+  const acceptAllCookieSettingsBtn = document.getElementById('acceptAllCookieSettingsBtn');
+
+  function openCookieSettingsModal() {
+    if (cookieSettingsModal) cookieSettingsModal.classList.add('active');
+    if (cookieSettingsModalBackdrop) cookieSettingsModalBackdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCookieSettingsModal() {
+    if (cookieSettingsModal) cookieSettingsModal.classList.remove('active');
+    if (cookieSettingsModalBackdrop) cookieSettingsModalBackdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (openCookieSettingsBtn) {
+    openCookieSettingsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openCookieSettingsModal();
+    });
+  }
+
+  if (closeCookieSettingsModalBtn) closeCookieSettingsModalBtn.addEventListener('click', closeCookieSettingsModal);
+  if (cookieSettingsModalBackdrop) cookieSettingsModalBackdrop.addEventListener('click', closeCookieSettingsModal);
+
+  if (saveCookieSettingsBtn) {
+    saveCookieSettingsBtn.addEventListener('click', () => {
+      const perf = document.getElementById('prefPerfCookies')?.checked ?? true;
+      const analytics = document.getElementById('prefAnalyticsCookies')?.checked ?? true;
+      localStorage.setItem('weblitex_cookie_prefs', JSON.stringify({ necessary: true, performance: perf, analytics: analytics }));
+      hideCookieConsent(true);
+      closeCookieSettingsModal();
+    });
+  }
+
+  if (acceptAllCookieSettingsBtn) {
+    acceptAllCookieSettingsBtn.addEventListener('click', () => {
+      const perfInput = document.getElementById('prefPerfCookies');
+      const analyticsInput = document.getElementById('prefAnalyticsCookies');
+      if (perfInput) perfInput.checked = true;
+      if (analyticsInput) analyticsInput.checked = true;
+      localStorage.setItem('weblitex_cookie_prefs', JSON.stringify({ necessary: true, performance: true, analytics: true }));
+      hideCookieConsent(true);
+      closeCookieSettingsModal();
+    });
+  }
+
+  // Global ESC key to close any active modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePrivacyModal();
+      closeTermsModal();
+      closeCookieSettingsModal();
+    }
+  });
+
+  // 9. Weblitex Quantum Reticle Interactive Follower & Comet Stardust Engine
+  const isMobilePhoneOnly = window.matchMedia('(max-width: 600px) and (hover: none)').matches;
+
+  if (!isMobilePhoneOnly) {
     // 1. Create and inject cursor canvas, ring, and core dot if not present
     let canvas = document.getElementById('cursorCanvas');
     if (!canvas) {
