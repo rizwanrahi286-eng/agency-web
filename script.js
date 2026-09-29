@@ -20,16 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const mLinks = document.querySelectorAll('.m-link');
 
   if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menuToggle.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-    });
+    function toggleMobileMenu(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const isOpen = mobileMenu.classList.toggle('active');
+      menuToggle.classList.toggle('active', isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    menuToggle.addEventListener('click', toggleMobileMenu);
 
     mLinks.forEach(link => {
       link.addEventListener('click', () => {
         menuToggle.classList.remove('active');
         mobileMenu.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
       });
     });
 
@@ -37,6 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
         menuToggle.classList.remove('active');
         mobileMenu.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        menuToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -322,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending...';
       submitBtn.disabled = true;
       formMessage.style.color = '#94A3B8';
-      formMessage.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending your message to weblitex@gmail.com...';
+      formMessage.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending your message to weblitexagency@gmail.com...';
 
       // 5. If EmailJS is configured, send via EmailJS!
       if (isEmailJSConfigured) {
@@ -336,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone: phoneVal || 'Not provided',
             service: serviceVal || 'General Inquiry',
             message: messageVal,
-            to_email: 'weblitex@gmail.com'
+            to_email: 'weblitexagency@gmail.com'
           };
 
           await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
@@ -369,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
           _template: 'table'
         };
 
-        const response = await fetch('https://formsubmit.co/ajax/weblitex@gmail.com', {
+        const response = await fetch('https://formsubmit.co/ajax/weblitexagency@gmail.com', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -386,10 +402,10 @@ document.addEventListener('DOMContentLoaded', () => {
           contactForm.reset();
         } else if (result.message && result.message.toLowerCase().includes('activation')) {
           formMessage.style.color = '#FBBF24';
-          formMessage.innerHTML = '<i class="fas fa-envelope-open-text"></i> <strong>Activation Zaroori Hai:</strong> Apne email <strong>weblitex@gmail.com</strong> par FormSubmit ke <u>Activate Form</u> link par click karein ya EmailJS keys enter karein!';
+          formMessage.innerHTML = '<i class="fas fa-envelope-open-text"></i> <strong>Activation Zaroori Hai:</strong> Apne email <strong>weblitexagency@gmail.com</strong> par FormSubmit ke <u>Activate Form</u> link par click karein ya EmailJS keys enter karein!';
           contactForm.reset();
         } else if (result.message && result.message.toLowerCase().includes('web server')) {
-          const mailtoFallback = `mailto:weblitex@gmail.com?subject=${encodeURIComponent(customSubject)}&body=${encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\nPhone: ${phoneVal}\nService: ${serviceVal}\n\nMessage:\n${messageVal}`)}`;
+          const mailtoFallback = `mailto:weblitexagency@gmail.com?subject=${encodeURIComponent(customSubject)}&body=${encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\nPhone: ${phoneVal}\nService: ${serviceVal}\n\nMessage:\n${messageVal}`)}`;
           formMessage.style.color = '#FBBF24';
           formMessage.innerHTML = `<div style="line-height:1.6;margin-top:6px;">
             <i class="fas fa-info-circle"></i> EmailJS set ho chuka hai! Bas <code>script.js</code> mein apni 3 EmailJS keys enter karein.<br>
@@ -417,62 +433,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 8. Cookie Consent Landscape Card & Privacy Policy Modal
-  const cookieConsent = document.getElementById('cookieConsent');
-  const acceptCookies = document.getElementById('acceptCookies');
-  const rejectCookies = document.getElementById('rejectCookies');
-  const closeCookieBtn = document.getElementById('closeCookieBtn');
-  const openCookieSettingsBtn = document.getElementById('openCookieSettingsBtn');
-
+  // 8. Legal Modals (Privacy Policy, Terms of Service, Cookie Settings)
   const privacyModal = document.getElementById('privacyModal');
   const privacyModalBackdrop = document.getElementById('privacyModalBackdrop');
   const openPrivacyPolicyBtn = document.getElementById('openPrivacyPolicyBtn');
-  const openPrivacyModalFromCookie = document.getElementById('openPrivacyModalFromCookie');
-  const closePrivacyModalBtn = document.getElementById('closePrivacyModalBtn');
-  const closePrivacyModalFooterBtn = document.getElementById('closePrivacyModalFooterBtn');
-
-  const COOKIE_STORAGE_KEY = 'weblitex_cookie_consent_v1';
-  let nagTimer = null;
-
-  function showCookieConsent() {
-    if (cookieConsent && localStorage.getItem(COOKIE_STORAGE_KEY) !== 'accepted') {
-      cookieConsent.classList.add('active');
-    }
-  }
-
-  function hideCookieConsent(accepted = false) {
-    if (cookieConsent) cookieConsent.classList.remove('active');
-
-    if (accepted) {
-      // User explicitly accepted: persist and clear repeat timer
-      localStorage.setItem(COOKIE_STORAGE_KEY, 'accepted');
-      if (nagTimer) {
-        clearTimeout(nagTimer);
-        nagTimer = null;
-      }
-    } else {
-      // User clicked Decline or Close: Re-prompt every 3 seconds until accepted!
-      localStorage.removeItem(COOKIE_STORAGE_KEY);
-      if (nagTimer) clearTimeout(nagTimer);
-      nagTimer = setTimeout(() => {
-        showCookieConsent();
-      }, 3000);
-    }
-  }
-
-  // Initial trigger after 700ms if not accepted
-  if (cookieConsent && localStorage.getItem(COOKIE_STORAGE_KEY) !== 'accepted') {
-    setTimeout(showCookieConsent, 700);
-  }
-
-  if (acceptCookies) acceptCookies.addEventListener('click', () => hideCookieConsent(true));
-  if (rejectCookies) rejectCookies.addEventListener('click', () => hideCookieConsent(false));
-  if (closeCookieBtn) closeCookieBtn.addEventListener('click', () => hideCookieConsent(false));
-  // Privacy Policy Modal Controls
-  const privacyModal = document.getElementById('privacyModal');
-  const privacyModalBackdrop = document.getElementById('privacyModalBackdrop');
-  const openPrivacyPolicyBtn = document.getElementById('openPrivacyPolicyBtn');
-  const openPrivacyModalFromCookie = document.getElementById('openPrivacyModalFromCookie');
   const closePrivacyModalBtn = document.getElementById('closePrivacyModalBtn');
   const closePrivacyModalFooterBtn = document.getElementById('closePrivacyModalFooterBtn');
 
@@ -489,7 +453,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (openPrivacyPolicyBtn) openPrivacyPolicyBtn.addEventListener('click', openPrivacyModal);
-  if (openPrivacyModalFromCookie) openPrivacyModalFromCookie.addEventListener('click', openPrivacyModal);
   if (closePrivacyModalBtn) closePrivacyModalBtn.addEventListener('click', closePrivacyModal);
   if (closePrivacyModalFooterBtn) closePrivacyModalFooterBtn.addEventListener('click', closePrivacyModal);
   if (privacyModalBackdrop) privacyModalBackdrop.addEventListener('click', closePrivacyModal);
@@ -552,7 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const perf = document.getElementById('prefPerfCookies')?.checked ?? true;
       const analytics = document.getElementById('prefAnalyticsCookies')?.checked ?? true;
       localStorage.setItem('weblitex_cookie_prefs', JSON.stringify({ necessary: true, performance: perf, analytics: analytics }));
-      hideCookieConsent(true);
       closeCookieSettingsModal();
     });
   }
@@ -564,7 +526,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (perfInput) perfInput.checked = true;
       if (analyticsInput) analyticsInput.checked = true;
       localStorage.setItem('weblitex_cookie_prefs', JSON.stringify({ necessary: true, performance: true, analytics: true }));
-      hideCookieConsent(true);
       closeCookieSettingsModal();
     });
   }

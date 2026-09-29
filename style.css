@@ -436,15 +436,16 @@ input[type="text"], input[type="email"], input[type="tel"], textarea {
 
 .menu-btn {
   cursor: pointer;
-  z-index: 10;
+  z-index: 1010;
   background: transparent;
   border: none;
   flex-direction: column;
   justify-content: space-around;
-  width: 30px;
-  height: 25px;
-  padding: 0;
+  width: 36px;
+  height: 30px;
+  padding: 3px;
   display: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-btn span {
@@ -453,49 +454,51 @@ input[type="text"], input[type="email"], input[type="tel"], textarea {
   border-radius: 5px;
   width: 100%;
   height: 3px;
-  transition: all 0.3s linear;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  pointer-events: none;
 }
 
 .menu-btn.active span:first-child {
-  transform: rotate(45deg) translate(5px, 5px);
+  transform: rotate(45deg) translate(6px, 6px);
 }
 
 .menu-btn.active span:nth-child(2) {
   opacity: 0;
+  transform: scaleX(0);
 }
 
 .menu-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* Mobile Dropdown */
 .mobile-menu {
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  background: rgba(14, 21, 39, 0.96);
-  border: 1px solid rgba(0, 210, 180, 0.25);
-  border-radius: 14px;
-  width: 340px;
-  max-width: 90%;
+  background: rgba(10, 16, 32, 0.97);
+  border: 1px solid rgba(0, 210, 180, 0.35);
+  border-radius: 16px;
+  width: min(92%, 360px);
   padding: 24px;
-  transition: opacity 0.3s, transform 0.3s, visibility 0s linear 0.3s;
-  display: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+  display: block;
   position: absolute;
-  top: 70px;
-  right: auto;
-  transform: translateY(-20px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-15px);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 210, 180, 0.15);
+  z-index: 1005;
 }
 
 .mobile-menu.active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 .mobile-links {
@@ -2733,33 +2736,12 @@ input[type="text"], input[type="email"], input[type="tel"], textarea {
 /* ==========================================================================
    COOKIE CONSENT LANDSCAPE CARD (BOTTOM LEFT)
    ========================================================================== */
-.cookie-consent {
-  z-index: 99995;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  background: rgba(13, 21, 39, 0.95);
-  border: 1px solid rgba(0, 210, 180, 0.35);
-  border-radius: 16px;
-  width: 430px;
-  max-width: calc(100vw - 32px);
-  padding: 18px 20px;
-  position: fixed;
-  bottom: 25px;
-  left: 25px;
-  right: auto;
-  transform: translateY(35px) scale(0.96);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 210, 180, 0.15);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s ease;
-}
-
+.cookie-consent,
 .cookie-consent.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .cookie-close-btn {
@@ -3703,10 +3685,10 @@ input[type="text"], input[type="email"], input[type="tel"], textarea {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
   .nav-container {
     width: 92%;
-    height: 62px;
+    height: 64px;
     padding: 10px 18px;
   }
   .nav-btn,
@@ -3716,11 +3698,15 @@ input[type="text"], input[type="email"], input[type="tel"], textarea {
   .menu-btn {
     display: flex;
   }
+}
+
+@media screen and (min-width: 901px) {
   .mobile-menu {
-    width: 90%;
-    margin: 25px auto;
-    display: block;
+    display: none !important;
   }
+}
+
+@media screen and (max-width: 768px) {
   .hero-title {
     font-size: 3.2rem;
     line-height: 1.15;

@@ -73,7 +73,7 @@
           username: 'admin',
           password: 'Admin@Weblitex2026',
           name: 'Rizwan Rahi (Admin)',
-          email: 'weblitex@gmail.com',
+          email: 'weblitexagency@gmail.com',
           role: 'admin'
         },
         settings: {
