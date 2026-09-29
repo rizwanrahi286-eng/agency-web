@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1527"/>
+      <stop offset="50%" stop-color="#111927"/>
+      <stop offset="100%" stop-color="#0A0F1D"/>
+    </linearGradient>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2B4"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2B4" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#06B6D4" stop-opacity="0.02"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="600" fill="url(#bgGrad)"/>
+
+  <!-- Subtle Ambient Glow -->
+  <circle cx="300" cy="240" r="180" fill="url(#glowGrad)"/>
+
+  <!-- Cyber Grid Elements -->
+  <circle cx="300" cy="240" r="170" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <circle cx="300" cy="240" r="140" fill="none" stroke="rgba(0,210,180,0.18)" stroke-width="1"/>
+
+  <!-- Outer Avatar Ring with Gradient Glow -->
+  <circle cx="300" cy="240" r="120" fill="#152238" stroke="url(#tealGrad)" stroke-width="3" filter="url(#glow)"/>
+
+  <!-- Stylized Executive / Developer Silhouette -->
+  <!-- Head -->
+  <circle cx="300" cy="205" r="48" fill="url(#tealGrad)" opacity="0.95"/>
+  <!-- Torso & Shoulders -->
+  <path d="M 215 325 C 215 272, 252 262, 300 262 C 348 262, 385 272, 385 325 Z" fill="url(#tealGrad)" opacity="0.85"/>
+  <!-- Collar / Tie Accent -->
+  <polygon points="300,268 290,295 300,320 310,295" fill="#0A0F1D"/>
+
+  <!-- Monogram Badge -->
+  <rect x="250" y="340" width="100" height="34" rx="17" fill="#0A0F1D" stroke="url(#tealGrad)" stroke-width="1.5"/>
+  <text x="300" y="362" fill="#00D2B4" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="800" text-anchor="middle" letter-spacing="2">M. RIZWAN</text>
+
+  <!-- Tech Code Bracket Icon in Corner -->
+  <g transform="translate(480, 50)" opacity="0.4">
+    <text x="0" y="0" fill="#00D2B4" font-family="monospace" font-size="28" font-weight="bold">&lt;/&gt;</text>
+  </g>
+
+  <!-- Photo Placeholder Banner -->
+  <g transform="translate(100, 440)">
+    <rect width="400" height="96" rx="16" fill="rgba(10, 15, 29, 0.85)" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1"/>
+    
+    <!-- Camera Icon -->
+    <path d="M 148 488 C 148 483, 152 479, 157 479 L 165 479 L 170 473 L 186 473 L 191 479 L 199 479 C 204 479, 208 483, 208 488 L 208 506 C 208 511, 204 515, 199 515 L 157 515 C 152 515, 148 511, 148 506 Z" fill="none" stroke="#00D2B4" stroke-width="2"/>
+    <circle cx="178" cy="497" r="7" fill="none" stroke="#00D2B4" stroke-width="2"/>
+
+    <text x="200" y="38" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="700">PHOTO PLACEHOLDER</text>
+    <text x="200" y="60" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="500">Founder &amp; Lead Developer Photo</text>
+    <text x="200" y="80" fill="#00D2B4" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="600" letter-spacing="1">RECOMMENDED: 600 × 600 PX</text>
+  </g>
+</svg>
