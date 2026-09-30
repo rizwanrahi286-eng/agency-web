@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const spySections = [
     { id: 'home', el: document.getElementById('home'), targetHref: '#home' },
     { id: 'AboutUs', el: document.getElementById('AboutUs'), targetHref: '#AboutUs' },
-    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' }
+    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' },
+    { id: 'faq', el: document.getElementById('faq'), targetHref: '#faq' }
   ];
 
   function setActiveNavLink(targetHref) {
@@ -871,4 +872,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, 150);
   }
+
+  // 12. Local SEO FAQ Accordion Interactivity
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const questionBtn = item.querySelector('.faq-question');
+    if (questionBtn) {
+      questionBtn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('active');
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('active');
+          const otherBtn = otherItem.querySelector('.faq-question');
+          if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('active');
+          questionBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    }
+  });
 });
+
+

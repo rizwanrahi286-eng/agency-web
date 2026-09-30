@@ -1,0 +1,13 @@
+# robots.txt for https://weblitex.com
+# Umerkot's 1st Premier Web Development Services Agency
+
+User-agent: *
+Allow: /
+
+# Disallow private/admin areas
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /portal.html
+
+# XML Sitemap
+Sitemap: https://weblitex.com/sitemap.xml

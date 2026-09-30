@@ -1,6 +1,8 @@
 {
-  "name": "Weblitex",
+  "name": "Weblitex - 1st Web Development Agency in Umerkot",
   "short_name": "Weblitex",
+  "description": "Umerkot's 1st Premier Web Development & WordPress Engineering Agency",
+  "start_url": "/",
   "icons": [
     {
       "src": "favicon-192x192.png",
