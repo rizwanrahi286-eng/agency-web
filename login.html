@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Access & Login — Weblitex</title>
-  <meta name="description" content="Secure portal login for Weblitex clients, students and administrators with single-device protection.">
-  
+  <meta name="description"
+    content="Secure portal login for Weblitex clients, students and administrators with single-device protection.">
+
   <!-- Favicon & Brand Icons -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=2">
@@ -14,15 +16,17 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#0A0F1D">
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <!-- Shared Style -->
   <link rel="stylesheet" href="style.css">
 
@@ -71,6 +75,7 @@
       text-decoration: none;
       letter-spacing: -0.5px;
     }
+
     .login-header-logo span {
       color: #00D2B4;
     }
@@ -85,6 +90,7 @@
       font-weight: 600;
       transition: color 0.25s ease;
     }
+
     .btn-back-home:hover {
       color: #00D2B4;
     }
@@ -180,13 +186,16 @@
       font-size: 0.78rem;
       color: #00D2B4;
     }
+
     .device-chip i {
       font-size: 1rem;
     }
+
     .device-chip .chip-text {
       color: #CBD5E1;
       line-height: 1.3;
     }
+
     .device-chip strong {
       color: #00D2B4;
     }
@@ -235,7 +244,8 @@
       border-color: #00D2B4;
       box-shadow: 0 0 0 3px rgba(0, 210, 180, 0.18);
     }
-    .input-icon-wrap input:focus + i.prefix-icon {
+
+    .input-icon-wrap input:focus+i.prefix-icon {
       color: #00D2B4;
     }
 
@@ -251,6 +261,7 @@
       font-size: 0.9rem;
       padding: 4px;
     }
+
     .toggle-pwd-btn:hover {
       color: #E2E8F0;
     }
@@ -320,6 +331,7 @@
       color: #00D2B4;
       text-decoration: none;
     }
+
     .login-footer-hint a:hover {
       text-decoration: underline;
     }
@@ -338,6 +350,7 @@
     }
   </style>
 </head>
+
 <body class="login-body">
 
   <div class="login-bg-glow"></div>
@@ -355,7 +368,7 @@
   <!-- Login Card Container -->
   <main class="login-wrapper">
     <div class="login-card">
-      
+
       <!-- Role Switch Tabs -->
       <div class="login-tabs">
         <button type="button" class="login-tab active" id="tabUser" onclick="switchLoginRole('user')">
@@ -383,7 +396,7 @@
 
       <!-- Login Form -->
       <form id="portalLoginForm" onsubmit="handlePortalLogin(event)">
-        
+
         <div class="form-group-login">
           <label for="usernameInput" id="labelUsername">Username</label>
           <div class="input-icon-wrap">
@@ -395,9 +408,11 @@
         <div class="form-group-login">
           <label for="passwordInput">Password</label>
           <div class="input-icon-wrap">
-            <input type="password" id="passwordInput" required placeholder="Enter password" autocomplete="current-password">
+            <input type="password" id="passwordInput" required placeholder="Enter password"
+              autocomplete="current-password">
             <i class="fas fa-lock prefix-icon"></i>
-            <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">
+            <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility()"
+              aria-label="Toggle password visibility">
               <i class="fas fa-eye" id="eyeIcon"></i>
             </button>
           </div>
@@ -411,10 +426,10 @@
         <div id="loginAlert"></div>
 
         <!-- Admin Quick Hint Box -->
-        <div class="admin-tip-box" id="adminTipBox">
+        <!-- <div class="admin-tip-box" id="adminTipBox">
           <i class="fas fa-key"></i> <strong>Admin Credentials:</strong><br>
           Username: <code>admin</code> &bull; Password: <code>Admin@Weblitex2026</code>
-        </div>
+        </div> -->
       </form>
 
       <div class="login-footer-hint">
@@ -544,4 +559,5 @@
     }
   </script>
 </body>
+
 </html>
