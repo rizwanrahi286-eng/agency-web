@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const spySections = [
     { id: 'home', el: document.getElementById('home'), targetHref: '#home' },
+    { id: 'projects', el: document.getElementById('projects'), targetHref: '#projects' },
     { id: 'AboutUs', el: document.getElementById('AboutUs'), targetHref: '#AboutUs' },
-    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' },
-    { id: 'faq', el: document.getElementById('faq'), targetHref: '#faq' }
+    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' }
   ];
 
   function setActiveNavLink(targetHref) {
@@ -271,26 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const achievementsSec = document.querySelector('.achievements-section');
   if (achievementsSec) observer.observe(achievementsSec);
 
-  // ============================================================
-  // EMAILJS CONFIGURATION
-  // (Get your free keys from: https://dashboard.emailjs.com)
-  // ============================================================
-  const EMAILJS_CONFIG = {
-    publicKey: 'GyHOjaAwNuvjv3OQ5',     // Account -> API Keys -> Public Key
-    serviceId: 'service_n4fyfmh',     // Email Services -> Service ID
-    templateId: 'template_tlsr0hu',   // Email Templates -> Template ID
-  };
-
-  // Initialize EmailJS if public key is configured
-  const isEmailJSConfigured = typeof emailjs !== 'undefined' && 
-                              EMAILJS_CONFIG.publicKey && 
-                              EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY';
-
-  if (isEmailJSConfigured) {
-    emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
-  }
-
-  // 7. Contact Form Direct Delivery with EmailJS & FormSubmit Fallback
+  // 7. Contact Form Direct Delivery with FormSubmit & Anti-Spam Protection
   const contactForm = document.getElementById('contactForm');
   const formMessage = document.getElementById('formMessage');
   const hiddenContactIframe = document.getElementById('hidden_contact_iframe');
@@ -304,8 +285,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const phoneInput = contactForm.querySelector('#phone');
       const serviceInput = contactForm.querySelector('#service');
       const messageInput = contactForm.querySelector('#message');
+      const honeyInput = contactForm.querySelector('input[name="_honey"]');
       const replytoInput = document.getElementById('replytoInput');
       const subjectInput = document.getElementById('subjectInput');
+
+      // Honeypot spam check: if filled by bot, silently succeed
+      if (honeyInput && honeyInput.value) {
+        console.warn('Spam detected via honeypot.');
+        formMessage.style.color = '#00D2B4';
+        formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Thank you! Your message has been received.';
+        contactForm.reset();
+        return;
+      }
 
       const nameVal = nameInput ? nameInput.value.trim() : '';
       const emailVal = emailInput ? emailInput.value.trim() : '';
@@ -341,38 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formMessage.style.color = '#94A3B8';
       formMessage.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending your message to weblitexagency@gmail.com...';
 
-      // 5. If EmailJS is configured, send via EmailJS!
-      if (isEmailJSConfigured) {
-        try {
-          const templateParams = {
-            name: nameVal,
-            from_name: nameVal,
-            email: emailVal,
-            from_email: emailVal,
-            reply_to: emailVal,
-            phone: phoneVal || 'Not provided',
-            service: serviceVal || 'General Inquiry',
-            message: messageVal,
-            to_email: 'weblitexagency@gmail.com'
-          };
-
-          await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
-
-          formMessage.style.color = '#00D2B4';
-          formMessage.innerHTML = `<i class="fas fa-check-circle"></i> Thank you, <strong>${nameVal}</strong>! Your message has been sent successfully via EmailJS.`;
-          contactForm.reset();
-        } catch (error) {
-          console.error('EmailJS send failed:', error);
-          formMessage.style.color = '#F87171';
-          formMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> EmailJS Error: ${error.text || error.message || 'Failed to send'}`;
-        } finally {
-          submitBtn.innerHTML = originalBtnText;
-          submitBtn.disabled = false;
-        }
-        return;
-      }
-
-      // 6. If EmailJS keys are not yet set, attempt FormSubmit or prompt for EmailJS keys
+      // 5. Submit via FormSubmit AJAX or fallback to native iframe submission
       try {
         const payload = {
           name: nameVal,
@@ -382,7 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
           message: messageVal,
           _subject: customSubject,
           _replyto: emailVal,
-          _captcha: 'false',
           _template: 'table'
         };
 
@@ -403,26 +362,25 @@ document.addEventListener('DOMContentLoaded', () => {
           contactForm.reset();
         } else if (result.message && result.message.toLowerCase().includes('activation')) {
           formMessage.style.color = '#FBBF24';
-          formMessage.innerHTML = '<i class="fas fa-envelope-open-text"></i> <strong>Activation Zaroori Hai:</strong> Apne email <strong>weblitexagency@gmail.com</strong> par FormSubmit ke <u>Activate Form</u> link par click karein ya EmailJS keys enter karein!';
+          formMessage.innerHTML = '<i class="fas fa-envelope-open-text"></i> <strong>Activation Notice:</strong> Please check <strong>weblitexagency@gmail.com</strong> and click the FormSubmit activation link.';
           contactForm.reset();
-        } else if (result.message && result.message.toLowerCase().includes('web server')) {
-          const mailtoFallback = `mailto:weblitexagency@gmail.com?subject=${encodeURIComponent(customSubject)}&body=${encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\nPhone: ${phoneVal}\nService: ${serviceVal}\n\nMessage:\n${messageVal}`)}`;
-          formMessage.style.color = '#FBBF24';
-          formMessage.innerHTML = `<div style="line-height:1.6;margin-top:6px;">
-            <i class="fas fa-info-circle"></i> EmailJS set ho chuka hai! Bas <code>script.js</code> mein apni 3 EmailJS keys enter karein.<br>
-            Ya abhi direct bhejne ke liye: <a href="${mailtoFallback}" style="color:#38BDF8;font-weight:700;text-decoration:underline;">Gmail / Mail Client se send karein</a>
-          </div>`;
         } else {
-          formMessage.style.color = '#00D2B4';
-          formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Thank you! Your message has been received.';
-          contactForm.reset();
+          // If AJAX response has another format, submit via iframe fallback
+          if (hiddenContactIframe) {
+            hiddenContactIframe.onload = function() {
+              formMessage.style.color = '#00D2B4';
+              formMessage.innerHTML = `<i class="fas fa-check-circle"></i> Thank you, <strong>${nameVal}</strong>! Your message has been sent successfully to Weblitex.`;
+              contactForm.reset();
+            };
+          }
+          contactForm.submit();
         }
       } catch (err) {
-        console.warn('Submission issue, attempting fallback submission:', err);
+        console.warn('AJAX submission failed, attempting native iframe fallback:', err);
         if (hiddenContactIframe) {
           hiddenContactIframe.onload = function() {
             formMessage.style.color = '#00D2B4';
-            formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Message sent successfully!';
+            formMessage.innerHTML = `<i class="fas fa-check-circle"></i> Thank you, <strong>${nameVal}</strong>! Your message has been sent successfully to Weblitex.`;
             contactForm.reset();
           };
         }
@@ -872,26 +830,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, 150);
   }
-
-  // 12. Local SEO FAQ Accordion Interactivity
-  const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
-    const questionBtn = item.querySelector('.faq-question');
-    if (questionBtn) {
-      questionBtn.addEventListener('click', () => {
-        const isOpen = item.classList.contains('active');
-        faqItems.forEach(otherItem => {
-          otherItem.classList.remove('active');
-          const otherBtn = otherItem.querySelector('.faq-question');
-          if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-        });
-        if (!isOpen) {
-          item.classList.add('active');
-          questionBtn.setAttribute('aria-expanded', 'true');
-        }
-      });
-    }
-  });
 });
-
-
