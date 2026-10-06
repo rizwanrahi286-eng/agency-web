@@ -65,8 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const spySections = [
     { id: 'home', el: document.getElementById('home'), targetHref: '#home' },
     { id: 'projects', el: document.getElementById('projects'), targetHref: '#projects' },
+    { id: 'process', el: document.getElementById('process'), targetHref: '#process' },
     { id: 'AboutUs', el: document.getElementById('AboutUs'), targetHref: '#AboutUs' },
-    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' }
+    { id: 'Reference', el: document.getElementById('Reference'), targetHref: '#Reference' },
+    { id: 'faq', el: document.getElementById('faq'), targetHref: '#faq' }
   ];
 
   function setActiveNavLink(targetHref) {
@@ -147,72 +149,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 4. Featured Projects Carousel (Configured for 3 Projects)
+  // 4. Featured Projects Modern Scroll-Snap Carousel (B3)
+  const carouselContainer = document.querySelector('.carousel-container');
   const carousel = document.getElementById('projectCarousel');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const dots = document.querySelectorAll('.carousel-dots .dot');
   const projectCards = document.querySelectorAll('.project-card');
 
-  let currentIndex = 0;
-  const totalCards = projectCards.length;
-
-  function getMaxIndex() {
-    if (window.innerWidth <= 768) {
-      return totalCards - 1;
-    } else if (window.innerWidth <= 968) {
-      return Math.max(0, totalCards - 2);
-    } else {
-      return Math.max(0, totalCards - 3);
+  if (carouselContainer && projectCards.length > 0) {
+    function getCardStep() {
+      const card = projectCards[0];
+      return card ? card.offsetWidth + 24 : 380;
     }
-  }
 
-  function updateCarousel() {
-    if (!carousel || totalCards === 0) return;
-    const cardWidth = projectCards[0].offsetWidth + 30; // 15px margin left & right
-    carousel.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    function updateActiveDot() {
+      const scrollLeft = carouselContainer.scrollLeft;
+      const step = getCardStep();
+      const activeIdx = Math.round(scrollLeft / step);
+      dots.forEach((dot, idx) => {
+        if (idx === Math.min(activeIdx, dots.length - 1)) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
 
-    dots.forEach((dot, index) => {
-      if (index === currentIndex) {
-        dot.classList.add('active');
-      } else {
-        dot.classList.remove('active');
-      }
-    });
-  }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        const step = getCardStep();
+        carouselContainer.scrollBy({ left: step, behavior: 'smooth' });
+      });
+    }
 
-  if (nextBtn && prevBtn) {
-    nextBtn.addEventListener('click', () => {
-      const maxIndex = getMaxIndex();
-      if (maxIndex === 0) {
-        currentIndex = (currentIndex + 1) % totalCards;
-      } else {
-        currentIndex = (currentIndex >= maxIndex) ? 0 : currentIndex + 1;
-      }
-      updateCarousel();
-    });
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        const step = getCardStep();
+        carouselContainer.scrollBy({ left: -step, behavior: 'smooth' });
+      });
+    }
 
-    prevBtn.addEventListener('click', () => {
-      const maxIndex = getMaxIndex();
-      if (maxIndex === 0) {
-        currentIndex = (currentIndex <= 0) ? totalCards - 1 : currentIndex - 1;
-      } else {
-        currentIndex = (currentIndex <= 0) ? maxIndex : currentIndex - 1;
-      }
-      updateCarousel();
-    });
-
-    dots.forEach(dot => {
+    dots.forEach((dot, idx) => {
       dot.addEventListener('click', () => {
-        currentIndex = parseInt(dot.getAttribute('data-index'), 10) || 0;
-        updateCarousel();
+        const step = getCardStep();
+        carouselContainer.scrollTo({ left: idx * step, behavior: 'smooth' });
+        dots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
       });
     });
 
-    window.addEventListener('resize', updateCarousel);
+    carouselContainer.addEventListener('scroll', () => {
+      window.requestAnimationFrame(updateActiveDot);
+    }, { passive: true });
   }
 
-  // 5. Support / Services Tabs
+  // 5. Support / Services Tabs (B5)
   const tabTriggers = document.querySelectorAll('.tab-trigger');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -234,9 +226,48 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Number Counter Animation on Scroll
+  // 6. Number Counter Animation on Scroll (B4)
   const counters = document.querySelectorAll('.counter-value');
   let animated = false;
+
+  // 6b. FAQ Accordion Interaction (B9)
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const trigger = item.querySelector('.faq-trigger');
+    if (trigger) {
+      trigger.addEventListener('click', () => {
+        const isOpen = item.classList.contains('active');
+        // Close all items
+        faqItems.forEach(other => {
+          other.classList.remove('active');
+          const otherTrigger = other.querySelector('.faq-trigger');
+          if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+        });
+        // Toggle clicked item
+        if (!isOpen) {
+          item.classList.add('active');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    }
+  });
+
+  // 6c. Scroll Reveal Animations (B13)
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const revealElements = document.querySelectorAll('.reveal, .process-card, .achievement-card, .social-media-container, .contact-info, .contact-form');
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
+  }
 
   function runCounters() {
     counters.forEach(counter => {
